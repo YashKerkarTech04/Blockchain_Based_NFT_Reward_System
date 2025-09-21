@@ -10,7 +10,7 @@ export default function Navbar({ onLogout }) {
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">🎓 Student Portal</div>
+      <div className="navbar-logo">NFT</div>
       <ul className="navbar-links">
         <li><a href="/">Home</a></li>
         <li><a href="/achievements">My Achievements</a></li>
