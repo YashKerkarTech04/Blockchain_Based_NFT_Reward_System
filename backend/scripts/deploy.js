@@ -1,5 +1,6 @@
-// scripts/deploy.cjs
-const hre = require("hardhat");
+// scripts/deploy.js
+import hre from "hardhat";
+import fs from "fs";
 
 async function main() {
   console.log("Deploying AchievementBadges contract...");
@@ -13,7 +14,6 @@ async function main() {
   console.log("✅ AchievementBadges deployed to:", address);
   
   // Save to environment file
-  const fs = require("fs");
   fs.appendFileSync(".env", `\nCONTRACT_ADDRESS=${address}`);
   
   return address;

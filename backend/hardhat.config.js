@@ -1,17 +1,22 @@
-// hardhat.config.cjs
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+import "@nomicfoundation/hardhat-toolbox";
+import "dotenv/config";
 
-/** @type import('hardhat/config').HardhatUserConfig */
-module.exports = {
+export default {
   solidity: {
-    version: "0.8.19",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200,
+    compilers: [
+      {
+        version: "0.8.19",
+        settings: {
+          optimizer: { enabled: true, runs: 200 },
+        },
       },
-    },
+      {
+        version: "0.8.28",
+        settings: {
+          optimizer: { enabled: true, runs: 200 },
+        },
+      },
+    ],
   },
   networks: {
     sepolia: {
