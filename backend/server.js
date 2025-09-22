@@ -1,10 +1,11 @@
 // server.js
-const express = require("express");
-const mysql = require("mysql2");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const multer = require("multer");
-const path = require("path");
+
+import express from "express";
+import mysql from "mysql2";
+import cors from "cors";
+import bodyParser from "body-parser";
+import multer from "multer";
+import path from "path";
 
 const app = express();
 const PORT = 5000;
