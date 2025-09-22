@@ -2,31 +2,41 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #2c3e50;
-  padding: 12px 20px;
+  background: linear-gradient(90deg, #1f3c88, #2c5364);
+  padding: 12px 24px;
   color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .navbar-logo {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: bold;
+  color: #fff;
 }
 
 .navbar-links {
   list-style: none;
   display: flex;
   gap: 20px;
+  position: relative;
+}
+
+.navbar-links li {
+  position: relative;
 }
 
 .navbar-links li a {
   color: #fff;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s ease;
+  padding: 6px 10px;
+  transition: all 0.2s ease;
+  border-radius: 6px;
 }
 
 .navbar-links li a:hover {
+  background: rgba(255, 255, 255, 0.15);
   color: #1abc9c;
 }
 
@@ -34,13 +44,45 @@
   background: #e74c3c;
   color: #fff;
   border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .logout-btn:hover {
   background: #c0392b;
+  transform: translateY(-1px);
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  background: #2c3e50;
+  border-radius: 8px;
+  padding: 8px 0;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  min-width: 180px;
+  z-index: 10;
+}
+
+.dropdown-menu li {
+  margin: 0;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 8px 16px;
+  color: #fff;
+  font-weight: 400;
+  transition: background 0.2s ease;
+  border-radius: 6px;
+}
+
+.dropdown-menu li a:hover {
+  background: #1abc9c;
+  color: #fff;
 }

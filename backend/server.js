@@ -135,8 +135,8 @@ app.post("/student/achievement", upload.single("certificate"), (req, res) => {
 
   const sql = `
     INSERT INTO achievements 
-    (achievementName, position, description, date, category, teacherUsername, studentUsername, certificate)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    (achievementName, position, description, date, category, teacherUsername, studentUsername, certificate, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
@@ -150,6 +150,7 @@ app.post("/student/achievement", upload.single("certificate"), (req, res) => {
       teacherUsername,
       studentUsername,
       certificateFile,
+      "pending",
     ],
     (err, result) => {
       if (err) {
@@ -171,7 +172,7 @@ app.get("/teacher/achievements/:username", (req, res) => {
   const sql = `
     SELECT id, achievementName, position, description, date, category, certificate, studentUsername
     FROM achievements
-    WHERE teacherUsername = ?
+    WHERE teacherUsername = ? AND status = 'pending'
   `;
 
   db.query(sql, [username], (err, results) => {
@@ -182,6 +183,80 @@ app.get("/teacher/achievements/:username", (req, res) => {
     res.json(results);
   });
 });
+
+// ====================== TEACHER ACTION ON ACHIEVEMENT ======================
+app.post("/teacher/achievement/:id/action", (req, res) => {
+  const { id } = req.params;
+  const { action, teacherComment, tokenId, metadataUri, txHash } = req.body;
+
+  // Validate action
+  const validActions = ["approved", "declined", "revision_requested"];
+  if (!validActions.includes(action)) {
+    return res.status(400).json({ error: "Invalid action" });
+  }
+
+  const sql = `
+    UPDATE achievements
+    SET status = ?, 
+        teacherComment = ?,
+        tokenId = ?, 
+        metadataUri = ?, 
+        txHash = ?
+    WHERE id = ?
+  `;
+
+  db.query(sql, [action, teacherComment || null, tokenId || null, metadataUri || null, txHash || null, id], (err, result) => {
+    if (err) {
+      console.error("❌ Error updating achievement:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    res.json({ message: `Achievement ${action} successfully!` });
+  });
+});
+
+// ====================== GET STUDENT'S PENDING ACHIEVEMENTS ======================
+app.get("/student/achievements/pending/:username", (req, res) => {
+  const { username } = req.params;
+
+  const sql = `
+    SELECT id, achievementName, position, description, date, category, 
+           certificate, teacherUsername, status, teacherComment, created_at
+    FROM achievements 
+    WHERE studentUsername = ? AND status = 'pending'
+    ORDER BY created_at DESC
+  `;
+
+  db.query(sql, [username], (err, results) => {
+    if (err) {
+      console.error("Error fetching pending achievements:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.json(results);
+  });
+});
+
+// ====================== GET STUDENT'S DECLINED ACHIEVEMENTS ======================
+app.get("/student/achievements/declined/:username", (req, res) => {
+  const { username } = req.params;
+
+  const sql = `
+    SELECT id, achievementName, position, description, date, category, 
+           certificate, teacherUsername, status, teacherComment, 
+           created_at
+    FROM achievements 
+    WHERE studentUsername = ? AND status = 'declined'
+  `;
+
+  db.query(sql, [username], (err, results) => {
+    if (err) {
+      console.error("Error fetching declined achievements:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.json(results);
+  });
+});
+
 
 // ====================== START SERVER ======================
 app.listen(PORT, () => {
